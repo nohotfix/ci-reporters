@@ -1,0 +1,48 @@
+name: Release
+
+# Human-initiated, deterministic, build-on-release (mirrors nohotfix/report-results):
+# no committed dist, no stored NPM_TOKEN, no AI in the release path. Publishing uses
+# GitHub Actions OIDC trusted publishing + npm provenance.
+#
+# To cut a release: tag the package version, then create a GitHub Release for that tag
+# (or run this workflow manually). Configure the npm package's "Trusted Publisher" to this
+# repo + workflow first, so no long-lived token is needed.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Workspace package to publish (e.g. @nohotfix/playwright-reporter)'
+        required: true
+        default: '@nohotfix/playwright-reporter'
+
+permissions:
+  contents: read
+  id-token: write # required for OIDC trusted publishing + provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Build + verify on the release commit — the bundle is produced here, never committed.
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+      # Publish the customer-facing reporter with provenance. ci-core is bundled in, not published.
+      - name: Publish
+        run: pnpm --filter "${PACKAGE}" publish --no-git-checks --provenance --access public
+        env:
+          PACKAGE: ${{ github.event.inputs.package || '@nohotfix/playwright-reporter' }}
+          NPM_CONFIG_PROVENANCE: 'true'

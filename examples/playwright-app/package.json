@@ -1,0 +1,16 @@
+{
+  "name": "@nohotfix/example-playwright-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Dogfood: a Playwright suite reporting into NoHotfix via @nohotfix/playwright-reporter (no curl).",
+  "type": "module",
+  "scripts": {
+    "dogfood": "playwright test"
+  },
+  "dependencies": {
+    "@nohotfix/playwright-reporter": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

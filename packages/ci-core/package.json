@@ -1,0 +1,31 @@
+{
+  "name": "@nohotfix/ci-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared core for NoHotfix CI reporters — bundled into each reporter, never published.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "prettier --check \"src/**/*.ts\"",
+    "clean": "rm -rf dist .turbo"
+  },
+  "devDependencies": {
+    "zod": "^3.25.0"
+  }
+}

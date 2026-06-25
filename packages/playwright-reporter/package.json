@@ -1,0 +1,42 @@
+{
+  "name": "@nohotfix/playwright-reporter",
+  "version": "0.1.0",
+  "description": "Report Playwright results into NoHotfix to drive the run's Go/No-Go gate — zero curl, zero JUnit, zero title tokens.",
+  "keywords": ["playwright", "playwright-reporter", "nohotfix", "ci", "qa", "release"],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "prettier --check \"src/**/*.ts\"",
+    "clean": "rm -rf dist .turbo"
+  },
+  "peerDependencies": {
+    "@playwright/test": ">=1.40.0"
+  },
+  "dependencies": {
+    "@nohotfix/ci-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}
