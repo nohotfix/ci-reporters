@@ -47,6 +47,16 @@ importers:
         specifier: ^3.2.0
         version: 3.2.7(@types/node@22.20.0)
 
+  examples/vitest-e2e:
+    dependencies:
+      '@nohotfix/vitest-reporter':
+        specifier: workspace:*
+        version: link:../../packages/vitest-reporter
+    devDependencies:
+      vitest:
+        specifier: ^3.2.0
+        version: 3.2.7(@types/node@22.20.0)
+
   packages/ci-core:
     devDependencies:
       zod:
