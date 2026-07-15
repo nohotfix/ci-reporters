@@ -1,0 +1,40 @@
+# Dogfood — Vitest app using `@nohotfix/vitest-reporter`
+
+The canonical acceptance for the Vitest reporter (the same bar the Playwright dogfood set): an
+`nhf`-tagged Vitest v3 suite that reports into a **live** NoHotfix and flips a real automated
+member / drives the run's Go/No-Go gate — with **no curl step and no JUnit file**.
+
+## Run it (the live dogfood)
+
+```bash
+# 1. Seed a NoHotfix automated test with ci_key `checkout.new-user.complete`
+#    and start an in-progress run on a known commit + environment.
+# 2. Mint an ingest token (Settings → Integrations).
+
+export NOHOTFIX_INGEST_TOKEN=nhf_...           # the minted token
+export NOHOTFIX_ENVIRONMENT=production         # must match the run's environment
+export NOHOTFIX_COMMIT=<the run's commit>      # or rely on GITHUB_SHA in CI
+export NOHOTFIX_API_URL=http://localhost:3001  # point at your NoHotfix API
+
+pnpm --filter @nohotfix/example-vitest-app dogfood
+```
+
+Expected: the suite runs, the reporter POSTs once at the end, and the automated member for
+`checkout.new-user.complete` flips `awaiting → passed`, re-evaluating the gate. The console
+(and the GitHub step summary in Actions) shows the disposition.
+
+## Validate without touching the gate
+
+```bash
+NOHOTFIX_DRY_RUN=true pnpm --filter @nohotfix/example-vitest-app dogfood
+# Validates the token via GET /api/ci/ping, prints the would-be payload, POSTs nothing.
+```
+
+## Sharded?
+
+```bash
+pnpm --filter @nohotfix/example-vitest-app dogfood --shard=1/3
+```
+
+Shards converge to one de-duplicated result set and a shard re-run is a no-op — the shard index
+folds into the submission's `Idempotency-Key`.
