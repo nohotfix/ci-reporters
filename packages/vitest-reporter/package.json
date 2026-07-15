@@ -1,0 +1,42 @@
+{
+  "name": "@nohotfix/vitest-reporter",
+  "version": "0.1.0",
+  "description": "Report Vitest results into NoHotfix to drive the run's Go/No-Go gate — zero curl, zero JUnit, zero title tokens.",
+  "keywords": ["vitest", "vitest-reporter", "nohotfix", "ci", "qa", "release"],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "prettier --check \"src/**/*.ts\"",
+    "clean": "rm -rf dist .turbo"
+  },
+  "peerDependencies": {
+    "vitest": ">=3.0.0"
+  },
+  "dependencies": {
+    "@nohotfix/ci-core": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

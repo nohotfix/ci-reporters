@@ -14,9 +14,13 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: 'Workspace package to publish (e.g. @nohotfix/playwright-reporter)'
+        description: 'Workspace package to publish'
         required: true
+        type: choice
         default: '@nohotfix/playwright-reporter'
+        options:
+          - '@nohotfix/playwright-reporter'
+          - '@nohotfix/vitest-reporter'
 
 permissions:
   contents: read
