@@ -26,6 +26,14 @@ Follow-on increments (separate releases): **Vitest → Cypress → Jest** report
 - **Honest** — a per-test disposition to the console and the GitHub step summary; a dry-run
   that validates and prints without writing.
 
+## Docs & tooling for contributors
+
+This repo is self-contained: [`CLAUDE.md`](./CLAUDE.md) orients you and [`docs/`](./docs) holds
+the full contributor guide — start at [`docs/README.md`](./docs/README.md). The headline task,
+**adding a reporter for a new runner**, is [`docs/anatomy-of-a-reporter.md`](./docs/anatomy-of-a-reporter.md)
+plus the `/new-reporter <runner>` command. Claude Code agents/skills/commands live in
+[`.claude/`](./.claude).
+
 ## Develop
 
 ```bash
