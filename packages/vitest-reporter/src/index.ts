@@ -103,6 +103,9 @@ export default class NoHotfixReporter implements Reporter {
 
   onInit(vitest?: Vitest): void {
     this.shardSuffix = resolveShardSuffix(this.env, vitest?.config);
+    // A reporter instance is reused across `--watch` re-runs — drop the previous run's results so a
+    // no-longer-run test can't be resubmitted.
+    this.collected.clear();
     try {
       this.config = resolveConfig(this.env, this.options);
       this.commit = resolveCommit(this.env, this.config.commitOverride);

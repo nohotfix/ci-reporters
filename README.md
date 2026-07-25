@@ -12,10 +12,13 @@ GitHub Action remain a permanent fallback.
 | Package | Published | Purpose |
 |---|---|---|
 | [`@nohotfix/playwright-reporter`](./packages/playwright-reporter) | ✅ npm | The Playwright reporter (increment 1) |
+| [`@nohotfix/vitest-reporter`](./packages/vitest-reporter) | ✅ npm | The Vitest v3 reporter (increment 2) |
+| [`@nohotfix/cypress-reporter`](./packages/cypress-reporter) | ✅ npm | The Cypress reporter (increment 3) |
+| [`@nohotfix/jest-reporter`](./packages/jest-reporter) | ✅ npm | The Jest v29+ reporter (increment 4) |
 | `@nohotfix/ci-core` | ❌ private | Shared transport/status/idempotency/summary core, **bundled** into each reporter |
 
-Follow-on increments (separate releases): **Vitest → Cypress → Jest** reporters, reusing
-`ci-core`.
+Each reporter is a thin adapter over the shared `ci-core`. Adding one for a new runner is the
+headline self-service task — see [`docs/anatomy-of-a-reporter.md`](./docs/anatomy-of-a-reporter.md).
 
 ## Design principles
 

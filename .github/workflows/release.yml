@@ -21,6 +21,8 @@ on:
         options:
           - '@nohotfix/playwright-reporter'
           - '@nohotfix/vitest-reporter'
+          - '@nohotfix/cypress-reporter'
+          - '@nohotfix/jest-reporter'
 
 permissions:
   contents: read

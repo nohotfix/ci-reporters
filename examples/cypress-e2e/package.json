@@ -1,0 +1,15 @@
+{
+  "name": "@nohotfix/e2e-cypress-live",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Env-driven live E2E harness: runs the cypress-reporter against a real NoHotfix API. Invoked explicitly by the nohotfix.com CI workflow (needs the Cypress binary + a browser), skipped unless NHF_E2E_CI_KEY is set. Exposes an `e2e` script (not `test`) so the repo's unit CI never boots Electron.",
+  "scripts": {
+    "e2e": "cypress run"
+  },
+  "dependencies": {
+    "@nohotfix/cypress-reporter": "workspace:*"
+  },
+  "devDependencies": {
+    "cypress": "^13.17.0"
+  }
+}
