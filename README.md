@@ -17,8 +17,23 @@ GitHub Action remain a permanent fallback.
 | [`@nohotfix/jest-reporter`](./packages/jest-reporter) | ✅ npm | The Jest v29+ reporter (increment 4) |
 | `@nohotfix/ci-core` | ❌ private | Shared transport/status/idempotency/summary core, **bundled** into each reporter |
 
-Each reporter is a thin adapter over the shared `ci-core`. Adding one for a new runner is the
-headline self-service task — see [`docs/anatomy-of-a-reporter.md`](./docs/anatomy-of-a-reporter.md).
+## Reporter status
+
+Build order is **Playwright → Vitest → Cypress → Jest** — each new reporter is a thin runner
+adapter over the shared `ci-core` (transport, status mapping, commit/env resolution, idempotency,
+summary). Until a runner has a first-party reporter, its results still flow via the raw
+JUnit-token path or the [`report-results`](https://github.com/nohotfix/report-results) Action — so
+this table is about **DX, not capability**.
+
+| Runner | Package | Status | How a test binds its `ci_key` |
+|---|---|---|---|
+| **Playwright** | `@nohotfix/playwright-reporter` | ✅ **Shipped** | `test(..., { annotation: { type: 'nhf', description: '<ci_key>' } }, …)` |
+| **Vitest** | `@nohotfix/vitest-reporter` | 🕛 **Next** | `testCase.meta()` or a `nhf.tag(ctx, '<ci_key>')` helper · peer-dep `vitest>=3` (`onTestCaseResult`/`onTestRunEnd`) |
+| **Cypress** | `@nohotfix/cypress-reporter` | 🕛 Planned | `this.nhfKey` in `before()`, or `cy.task('nhf:setKey', '<ci_key>')` (Mocha reporter) |
+| **Jest** | `@nohotfix/jest-reporter` | 🕛 Planned | an `nhfTest('<ci_key>', …)` wrapper, or `jest-metadata` read in `onTestResult` |
+
+Legend: ✅ Shipped · 🕛 Next / Planned. Per-runner annotation designs live in the platform repo's
+`docs/development/research/ci-reporters.md` (Phase C–F) and `ci-ingestion-dx.md` (§4).
 
 ## Design principles
 
