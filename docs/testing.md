@@ -48,6 +48,34 @@ point is the *reporting*, not the test's subject.
 `zod` is a **test-only** devDependency (the contract oracle) and never enters a reporter's
 runtime — the reporters keep **zero runtime dependencies** (Node 20 built-in `fetch`/`crypto`).
 
+## 5. Live E2E (real API, real gate flip) — driven by `nohotfix.com`
+
+Each reporter also ships an `examples/<runner>-e2e` **live** harness — the reporter wired as a
+customer would, tagging a single test with a `ci_key` and submitting to a **real** NoHotfix. It is
+env-driven and inert without it: skipped unless `NHF_E2E_CI_KEY` (plus the reporter env —
+`NOHOTFIX_API_URL` / `_INGEST_TOKEN` / `_ENVIRONMENT` / `_COMMIT`) is set. The **`nohotfix.com`** E2E
+workflow boots the API, seeds a run, discovers an in-progress automated `ci_key`, invokes the
+harness with that env, and asserts the member flipped in the database — the one check that the whole
+integration (not just the emitted payload) works. This repo's own CI never sets that env, so these
+stay skipped/untouched here.
+
+| Harness | Script | Runs under `pnpm test`? | Wired into `nohotfix.com` E2E workflow? |
+|---|---|---|---|
+| `examples/vitest-e2e` | `test` | yes — a `test.skipIf` skips in milliseconds when unset | ✅ yes |
+| `examples/playwright-e2e` | `test` | yes — `test.skip` at runtime; the test uses no `page`, so no browser | ⬜ **pending** — harness ready here; invocation not yet added to `nohotfix.com` |
+| `examples/jest-e2e` | `test` | yes — `test.skip` when unset; Jest boots but needs no browser | ⬜ **pending** — harness ready here; invocation not yet added to `nohotfix.com` |
+| `examples/cypress-e2e` | **`e2e`** | **no** — `cypress run` always needs the Cypress binary + Electron, so it is invoked explicitly by the pipeline, never by unit CI | ⬜ **pending** — harness ready here; invocation not yet added to `nohotfix.com` (its workflow must install the Cypress binary + run `pnpm --filter @nohotfix/e2e-cypress-live e2e`) |
+
+> **Cross-repo follow-up (tracked here, deliberately batched):** the last column is the outstanding
+> work, and it lives in the **`nohotfix.com`** repo, not this one. The plan is to **build the reporters
+> out first (each shipping a ready, validated `examples/<runner>-e2e` harness), then wire them all into
+> the `nohotfix.com` E2E workflow in one pass** — rather than round-tripping to the other repo per
+> reporter. The `vitest-e2e` harness is already driven by that workflow; `playwright-e2e` and
+> `cypress-e2e` exist and are validated here (they emit the correct payload against a dry-run) but the
+> workflow does **not** yet invoke them. Until it does, the live gate-flip is proven for Vitest only —
+> Playwright and Cypress are covered by contract tests + manual dogfood. When a new reporter lands, add
+> its `examples/<runner>-e2e` row with a ⬜; flip a cell to ✅ once the `nohotfix.com` workflow drives it.
+
 For the concrete recipe when adding tests to a new reporter, use the **`reporter-testing`** skill
 (`.claude/skills/reporter-testing/`).
 </content>

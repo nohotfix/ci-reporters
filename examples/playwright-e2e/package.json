@@ -1,0 +1,16 @@
+{
+  "name": "@nohotfix/e2e-playwright-live",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Env-driven live E2E harness: runs the playwright-reporter against a real NoHotfix API. Invoked by the nohotfix.com CI workflow; skipped unless NHF_E2E_CI_KEY + the reporter env are set.",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@nohotfix/playwright-reporter": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

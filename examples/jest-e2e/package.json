@@ -1,0 +1,15 @@
+{
+  "name": "@nohotfix/e2e-jest-live",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Env-driven live E2E harness: runs the jest-reporter against a real NoHotfix API. Invoked by the nohotfix.com CI workflow; skipped unless NHF_E2E_CI_KEY + the reporter env are set.",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@nohotfix/jest-reporter": "workspace:*"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
